@@ -22,7 +22,7 @@ const showImages = (images) => {
   images.forEach(image => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick="selectItem(event,'${image.previewURL}')" src="${image.previewURL}" alt="${image.tags}">`;
     gallery.appendChild(div)
   })
 
@@ -31,15 +31,32 @@ const showImages = (images) => {
 const getImages = (query) => {
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
-    .then(data => showImages(data.hitS))
+    .then(data => showImages(data.hits))
     .catch(err => console.log(err))
 }
+
+searchBtn.addEventListener('click', function () {
+  document.querySelector('.main').style.display = 'none';
+  clearInterval(timer);
+  const search = document.getElementById('search');
+  getImages(search.value)
+  sliders.length = 0;
+})
+
+document.getElementById("search").addEventListener("keypress", function(event) {
+    if (event.key == 'Enter'){
+      document.getElementById('search-btn').click();
+    }
+});
+
+//////////////////////////////////////////////////////
+
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
   element.classList.add('added');
- 
+  console.log(element);
   let item = sliders.indexOf(img);
   if (item === -1) {
     sliders.push(img);
@@ -47,6 +64,7 @@ const selectItem = (event, img) => {
     alert('Hey, Already added !')
   }
 }
+
 var timer
 const createSlider = () => {
   // check slider image length
@@ -66,14 +84,14 @@ const createSlider = () => {
   sliderContainer.appendChild(prevNext)
   document.querySelector('.main').style.display = 'block';
   // hide image aria
-  imagesArea.style.display = 'none';
+  imagesArea.style.display = 'block';
   const duration = document.getElementById('duration').value || 1000;
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
     item.innerHTML = `<img class="w-100"
-    src="${slide}"
-    alt="">`;
+    src="${slide.previewURL}"
+    alt="${image.tags}">`;
     sliderContainer.appendChild(item)
   })
   changeSlide(0)
@@ -109,13 +127,7 @@ const changeSlide = (index) => {
   items[index].style.display = "block"
 }
 
-searchBtn.addEventListener('click', function () {
-  document.querySelector('.main').style.display = 'none';
-  clearInterval(timer);
-  const search = document.getElementById('search');
-  getImages(search.value)
-  sliders.length = 0;
-})
+
 
 sliderBtn.addEventListener('click', function () {
   createSlider()
