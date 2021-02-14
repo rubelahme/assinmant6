@@ -7,7 +7,6 @@ const sliderContainer = document.getElementById('sliders');
 // selected image 
 let sliders = [];
 
-
 // If this key doesn't work
 // Find the name in the url and go to their website
 // to create your own api key
@@ -41,7 +40,7 @@ searchBtn.addEventListener('click', function () {
   getImages(search.value)
   sliders.length = 0;
 })
-
+//Enter search button
 document.getElementById("search").addEventListener("keypress", function(event) {
     if (event.key == 'Enter'){
       document.getElementById('search-btn').click();
@@ -60,7 +59,7 @@ const selectItem = (event, img) => {
   }
 }
 
-var timer;
+let timer;
 const createSlider = () => {
   // check slider image length
   if (sliders.length < 2) {
@@ -75,13 +74,11 @@ const createSlider = () => {
   <span class="prev" onclick="changeItem(-1)"><i class="fas fa-chevron-left"></i></span>
   <span class="next" onclick="changeItem(1)"><i class="fas fa-chevron-right"></i></span>
   `;
-
   sliderContainer.appendChild(prevNext)
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
   sliders.forEach(slide => {
-    console.log(slide);
     let item = document.createElement('div')
     item.className = "slider-item";
     item.innerHTML = `<img class="w-100"
@@ -90,12 +87,25 @@ const createSlider = () => {
     sliderContainer.appendChild(item)
   })
   changeSlide(0);
-  timer = setInterval(function () {
-    slideIndex++;
-    changeSlide(slideIndex);
-  },1000);
-
+  fullDay();
 }
+
+function fullDay() {
+  const duration =document.getElementById('duration');
+  durationId=duration.value;
+    if (durationId>=0) {
+    timer = setInterval(function () {
+      slideIndex++;
+      changeSlide(slideIndex);
+    },durationId*1);
+  }
+  else{
+    timer = setInterval(function () {
+      slideIndex++;
+      changeSlide(slideIndex);
+    },1000);
+  }
+};
 
 // change slider index 
 const changeItem = index => {
@@ -104,25 +114,30 @@ const changeItem = index => {
 
 // change slide item
 const changeSlide = (index) => {
-
   const items = document.querySelectorAll('.slider-item');
   if (index < 0) {
-    slideIndex = items.length - 1;
+    slideIndex = items.length + 1;
     index = slideIndex;
   };
-
   if (index >= items.length) {
     index = 0;
     slideIndex = 0;
   }
-
   items.forEach(item => {
     item.style.display = "none"
   })
-
   items[index].style.display = "block"
 }
 
 sliderBtn.addEventListener('click', function () {
-  createSlider()
+  createSlider();
 })
+bodyColor();
+
+function bodyColor(){
+    var myVar = setInterval(setColor, 4000);
+    function setColor() {
+      var x = document.body;
+      x.style.backgroundColor = x.style.backgroundColor == "greenyellow" ? "yellow" : "greenyellow";
+    }
+}
