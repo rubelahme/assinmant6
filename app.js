@@ -25,7 +25,6 @@ const showImages = (images) => {
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick="selectItem(event,'${image.previewURL}')" src="${image.previewURL}" alt="${image.tags}">`;
     gallery.appendChild(div)
   })
-
 }
 
 const getImages = (query) => {
@@ -49,23 +48,19 @@ document.getElementById("search").addEventListener("keypress", function(event) {
     }
 });
 
-//////////////////////////////////////////////////////
-
-
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
-  element.classList.add('added');
-  console.log(element);
+  element.classList.toggle('added');
   let item = sliders.indexOf(img);
-  if (item === -1) {
+  if (item == -1) {
     sliders.push(img);
   } else {
-    alert('Hey, Already added !')
+    sliders.pop(img);
   }
 }
 
-var timer
+var timer;
 const createSlider = () => {
   // check slider image length
   if (sliders.length < 2) {
@@ -84,21 +79,22 @@ const createSlider = () => {
   sliderContainer.appendChild(prevNext)
   document.querySelector('.main').style.display = 'block';
   // hide image aria
-  imagesArea.style.display = 'block';
-  const duration = document.getElementById('duration').value || 1000;
+  imagesArea.style.display = 'none';
   sliders.forEach(slide => {
+    console.log(slide);
     let item = document.createElement('div')
     item.className = "slider-item";
     item.innerHTML = `<img class="w-100"
-    src="${slide.previewURL}"
-    alt="${image.tags}">`;
+    src="${slide}"
+    alt="${slide}">`;
     sliderContainer.appendChild(item)
   })
-  changeSlide(0)
+  changeSlide(0);
   timer = setInterval(function () {
     slideIndex++;
     changeSlide(slideIndex);
-  }, duration);
+  },1000);
+
 }
 
 // change slider index 
@@ -111,7 +107,7 @@ const changeSlide = (index) => {
 
   const items = document.querySelectorAll('.slider-item');
   if (index < 0) {
-    slideIndex = items.length - 1
+    slideIndex = items.length - 1;
     index = slideIndex;
   };
 
@@ -126,8 +122,6 @@ const changeSlide = (index) => {
 
   items[index].style.display = "block"
 }
-
-
 
 sliderBtn.addEventListener('click', function () {
   createSlider()

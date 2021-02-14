@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -53,6 +53,18 @@
   </div>
   <!-- Optional JavaScript -->
   <script src="./app.js"></script>
+  <script>
+    var myVar = setInterval(setColor, 5000);
+     
+    function setColor() {
+      var x = document.body;
+      x.style.backgroundColor = x.style.backgroundColor == "greenyellow" ? "yellow" : "greenyellow";
+    }
+     
+    function stopColor() {
+      clearInterval(myVar);
+    }
+    </script>
 </body>
 
 </html>
